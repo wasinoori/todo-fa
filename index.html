@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>تودو لیست پیشرفته/title>
+<title>تودو لیست روزانه</title>
 
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/vue@3.2.31/dist/vue.global.prod.js"></script>
@@ -13,6 +13,15 @@
 </head>
 
 <style>
+    body{
+        padding: 0;
+        margin: 0;
+        direction: rtl;
+        
+    }
+    #checkbox{
+        margin-left: 5px;
+    }
 [v-cloak] { display: none; }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s ease;
@@ -23,10 +32,10 @@
 </style>
 <body class="bg-gray-100 min-h-screen">
   <div id="app" v-cloak class="container mx-auto p-4 max-w-md">
-    <h1 class="text-3xl font-bold mb-6 text-center text-indigo-600">Advanced Todo List</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center text-indigo-600">تودو لیست پیشرفته</h1>
     
     <div class="mb-4">
-      <input v-model="newTodo" @keyup.enter="addTodo" type="text" placeholder="Add a new task..." class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300">
+      <input v-model="newTodo" @keyup.enter="addTodo" type="text" placeholder="اضافه کردن جدید ..." class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300">
     </div>
     
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -34,7 +43,7 @@
         <transition-group name="fade">
           <li v-for="todo in filteredTodos" :key="todo.id" class="border-b last:border-b-0">
             <div class="flex items-center px-4 py-3">
-              <input type="checkbox" v-model="todo.completed" class="mr-3 form-checkbox h-5 w-5 text-indigo-600">
+              <input id="checkbox" type="checkbox" v-model="todo.completed" class="mr-3 form-checkbox h-5 w-5 text-indigo-600">
               <span :class="{ 'line-through text-gray-400': todo.completed }" class="flex-grow">{{ todo.text }}</span>
               <button @click="removeTodo(todo)" class="ml-2 text-red-500 hover:text-red-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -48,13 +57,13 @@
     </div>
     
     <div class="mt-4 flex justify-between items-center text-sm text-gray-600">
-      <span>{{ activeTodoCount }} items left</span>
+      <span>{{ activeTodoCount }} باقی مانده</span>
       <div class="space-x-2">
-        <button @click="filter = 'all'" :class="{ 'font-bold text-indigo-600': filter === 'all' }" class="focus:outline-none">All</button>
-        <button @click="filter = 'active'" :class="{ 'font-bold text-indigo-600': filter === 'active' }" class="focus:outline-none">Active</button>
-        <button @click="filter = 'completed'" :class="{ 'font-bold text-indigo-600': filter === 'completed' }" class="focus:outline-none">Completed</button>
+        <button @click="filter = 'all'" :class="{ 'font-bold text-indigo-600': filter === 'all' }" class="focus:outline-none">تمام</button>
+        <button @click="filter = 'active'" :class="{ 'font-bold text-indigo-600': filter === 'active' }" class="focus:outline-none">فعال</button>
+        <button @click="filter = 'completed'" :class="{ 'font-bold text-indigo-600': filter === 'completed' }" class="focus:outline-none">تکمیل شده</button>
       </div>
-      <button @click="clearCompleted" class="text-red-500 hover:text-red-700 focus:outline-none">Clear completed</button>
+      <button @click="clearCompleted" class="text-red-500 hover:text-red-700 focus:outline-none">کامل هارا پاک کنید</button>
     </div>
   </div>
 
