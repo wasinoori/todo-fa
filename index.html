@@ -4,12 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Advanced Todo List</title>
+<title>تودو لیست پیشرفته/title>
 
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/vue@3.2.31/dist/vue.global.prod.js"></script>
+<link rel="stylesheet" href="style.css">
 
 </head>
+
+<style>
+[v-cloak] { display: none; }
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+</style>
 <body class="bg-gray-100 min-h-screen">
   <div id="app" v-cloak class="container mx-auto p-4 max-w-md">
     <h1 class="text-3xl font-bold mb-6 text-center text-indigo-600">Advanced Todo List</h1>
@@ -47,59 +58,6 @@
     </div>
   </div>
 
-  <script>
-    const { createApp, ref, computed } = Vue;
-
-    createApp({
-      setup() {
-        const todos = ref([]);
-        const newTodo = ref('');
-        const filter = ref('all');
-
-        const addTodo = () => {
-          if (newTodo.value.trim()) {
-            todos.value.push({
-              id: Date.now(),
-              text: newTodo.value.trim(),
-              completed: false
-            });
-            newTodo.value = '';
-          }
-        };
-
-        const removeTodo = (todo) => {
-          todos.value = todos.value.filter(t => t !== todo);
-        };
-
-        const filteredTodos = computed(() => {
-          if (filter.value === 'active') {
-            return todos.value.filter(todo => !todo.completed);
-          } else if (filter.value === 'completed') {
-            return todos.value.filter(todo => todo.completed);
-          }
-          return todos.value;
-        });
-
-        const activeTodoCount = computed(() => {
-          return todos.value.filter(todo => !todo.completed).length;
-        });
-
-        const clearCompleted = () => {
-          todos.value = todos.value.filter(todo => !todo.completed);
-        };
-
-        return {
-          todos,
-          newTodo,
-          filter,
-          addTodo,
-          removeTodo,
-          filteredTodos,
-          activeTodoCount,
-          clearCompleted
-        };
-      }
-    }).mount('#app');
-  </script>
+  <script src="./script.js"></script>
 </body>
 </html>
