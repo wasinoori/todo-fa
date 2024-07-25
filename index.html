@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Advanced Todo List</title>
+
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/vue@3.2.31/dist/vue.global.prod.js"></script>
+
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div id="app" v-cloak class="container mx-auto p-4 max-w-md">
+    <h1 class="text-3xl font-bold mb-6 text-center text-indigo-600">Advanced Todo List</h1>
+    
+    <div class="mb-4">
+      <input v-model="newTodo" @keyup.enter="addTodo" type="text" placeholder="Add a new task..." class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300">
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <ul>
+        <transition-group name="fade">
+          <li v-for="todo in filteredTodos" :key="todo.id" class="border-b last:border-b-0">
+            <div class="flex items-center px-4 py-3">
+              <input type="checkbox" v-model="todo.completed" class="mr-3 form-checkbox h-5 w-5 text-indigo-600">
+              <span :class="{ 'line-through text-gray-400': todo.completed }" class="flex-grow">{{ todo.text }}</span>
+              <button @click="removeTodo(todo)" class="ml-2 text-red-500 hover:text-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </li>
+        </transition-group>
+      </ul>
+    </div>
+    
+    <div class="mt-4 flex justify-between items-center text-sm text-gray-600">
+      <span>{{ activeTodoCount }} items left</span>
+      <div class="space-x-2">
+        <button @click="filter = 'all'" :class="{ 'font-bold text-indigo-600': filter === 'all' }" class="focus:outline-none">All</button>
+        <button @click="filter = 'active'" :class="{ 'font-bold text-indigo-600': filter === 'active' }" class="focus:outline-none">Active</button>
+        <button @click="filter = 'completed'" :class="{ 'font-bold text-indigo-600': filter === 'completed' }" class="focus:outline-none">Completed</button>
+      </div>
+      <button @click="clearCompleted" class="text-red-500 hover:text-red-700 focus:outline-none">Clear completed</button>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        const todos = ref([]);
+        const newTodo = ref('');
+        const filter = ref('all');
+
+        const addTodo = () => {
+          if (newTodo.value.trim()) {
+            todos.value.push({
+              id: Date.now(),
+              text: newTodo.value.trim(),
+              completed: false
+            });
+            newTodo.value = '';
+          }
+        };
+
+        const removeTodo = (todo) => {
+          todos.value = todos.value.filter(t => t !== todo);
+        };
+
+        const filteredTodos = computed(() => {
+          if (filter.value === 'active') {
+            return todos.value.filter(todo => !todo.completed);
+          } else if (filter.value === 'completed') {
+            return todos.value.filter(todo => todo.completed);
+          }
+          return todos.value;
+        });
+
+        const activeTodoCount = computed(() => {
+          return todos.value.filter(todo => !todo.completed).length;
+        });
+
+        const clearCompleted = () => {
+          todos.value = todos.value.filter(todo => !todo.completed);
+        };
+
+        return {
+          todos,
+          newTodo,
+          filter,
+          addTodo,
+          removeTodo,
+          filteredTodos,
+          activeTodoCount,
+          clearCompleted
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
